@@ -5,6 +5,8 @@ namespace Tests\Feature\Http\Controllers;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+
+use App\Models\Repository;
 use App\Models\User;
 
 class RepositoryControllerTest extends TestCase
@@ -37,5 +39,51 @@ class RepositoryControllerTest extends TestCase
             ->assertRedirect('repositories');
             
         $this->assertDatabaseHas('repositories', $data);
+    }
+    
+    public function test_update(){
+        $repository = Repository::factory()->create();
+        $data = [
+            'url' => $this->faker->url,
+            'descripcion' => $this->faker->text,
+        ];
+        
+        $user = User::factory()->create();
+        
+        $this
+            ->actingAs($user)
+            ->put("repositories/$repository->id",$data)
+            ->assertRedirect("repositories/$repository->id/edit");
+        
+            
+        $this->assertDatabaseHas('repositories', $data);
+    }
+
+
+    //Validate Tests
+    
+    public function test_validate_store()
+    {
+        $user = User::factory()->create();
+
+        $this
+            ->actingAs($user)
+            ->post('repositories', [])
+            ->assertStatus(302)
+            // ->assertRedirect()
+            ->assertSessionHasErrors(['url', 'descripcion']);
+    }
+
+    public function test_validate_update()
+    {
+        $repository = Repository::factory()->create();
+        $user = User::factory()->create();
+
+        $this
+            ->actingAs($user)
+            ->put("repositories/$repository->id", [])
+            ->assertStatus(302)
+            ->assertSessionHasErrors(['url', 'descripcion']);
+
     }
 }
