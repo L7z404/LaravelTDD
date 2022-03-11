@@ -67,6 +67,18 @@ class RepositoryControllerTest extends TestCase
             
         $this->assertDatabaseHas('repositories', $data);
     }
+
+    public function test_show()
+    {
+        $user = User::factory()->create();
+        $repository = Repository::factory()->create(['user_id' => $user->id]);
+
+        $this
+            ->actingAs($user)
+            ->get("repositories/$repository->id")
+            ->assertStatus(200);
+
+    }
     
     public function test_update(){
         $user = User::factory()->create();
@@ -86,21 +98,7 @@ class RepositoryControllerTest extends TestCase
         $this->assertDatabaseHas('repositories', $data);
     }
 
-    public function test_update_policy()
-    {
-        $user = User::factory()->create();              //id = 1
-        $repository = Repository::factory()->create();  //user_id = 2
-        $data = [
-            'url' => $this->faker->url,
-            'descripcion' => $this->faker->text,
-        ];
-
-        $this
-            ->actingAs($user)
-            ->put("repositories/$repository->id", $data)
-            ->assertStatus(403);    //403 Forbiden
-
-    }
+    
 
     public function test_destroy()
     {
@@ -118,6 +116,37 @@ class RepositoryControllerTest extends TestCase
             'url' => $repository->url,
             'descripcion' => $repository->descripcion,
         ]);
+    }
+
+
+    //Policy Tests
+
+    public function test_show_policy()
+    {
+        $user = User::factory()->create();              //id = 1
+        $repository = Repository::factory()->create();  //user_id = 2
+
+        $this
+        ->actingAs($user)
+            ->get("repositories/$repository->id")
+            ->assertStatus(403);    //403 Forbiden
+
+    }
+    
+    public function test_update_policy()
+    {
+        $user = User::factory()->create();              //id = 1
+        $repository = Repository::factory()->create();  //user_id = 2
+        $data = [
+            'url' => $this->faker->url,
+            'descripcion' => $this->faker->text,
+        ];
+
+        $this
+            ->actingAs($user)
+            ->put("repositories/$repository->id", $data)
+            ->assertStatus(403);    //403 Forbiden
+
     }
     
     public function test_destroy_policy()
@@ -145,6 +174,7 @@ class RepositoryControllerTest extends TestCase
             // ->assertRedirect()
             ->assertSessionHasErrors(['url', 'descripcion']);
     }
+    
 
     public function test_validate_update()
     {
