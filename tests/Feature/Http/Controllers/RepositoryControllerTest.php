@@ -75,6 +75,20 @@ class RepositoryControllerTest extends TestCase
 
         $this
             ->actingAs($user)
+            ->get("repositories/$repository->id/edit")
+            ->assertStatus(200)
+            ->assertSee($repository->url)
+            ->assertSee($repository->descripcion);
+
+    }
+    
+    public function test_edit()
+    {
+        $user = User::factory()->create();
+        $repository = Repository::factory()->create(['user_id' => $user->id]);
+
+        $this
+            ->actingAs($user)
             ->get("repositories/$repository->id")
             ->assertStatus(200);
 
@@ -158,6 +172,18 @@ class RepositoryControllerTest extends TestCase
             ->actingAs($user)
             ->delete("repositories/$repository->id")
             ->assertStatus(403);
+
+    }
+
+    public function test_edit_policy()
+    {
+        $user = User::factory()->create();              //id = 1
+        $repository = Repository::factory()->create();  //user_id = 2
+
+        $this
+            ->actingAs($user)
+            ->get("repositories/$repository->id/edit")
+            ->assertStatus(403);    //403 Forbiden
 
     }
 
