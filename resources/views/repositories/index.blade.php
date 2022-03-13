@@ -15,27 +15,31 @@
                             <th>Enlace</th>
                             <th>&nbsp;</th>
                             <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
                         </tr>
                     <tbody>
                         @forelse ($repositories as $repository)
-                            <tr>
-                                <td class="border px-4 py-2">{{$repository->id}}</td>
-                                <td class="border px-4 py-2">{{$repository->url}}</td>
-                                <td>
-                                    <a href="{{route('repositories.show', $repository)}}">
-                                        Ver
-                                    </a>
-                                </td>
-                                <td>
-                                    <a href="{{route('repositories.edit', $repository)}}">
-                                        Editar
-                                    </a>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td class="border px-4 py-2">{{$repository->id}}</td>
+                            <td class="border px-4 py-2">{{$repository->url}}</td>
+                            <td>&ensp;</td>
+                            <td>
+                                <a class="bg-green-500 text-white font-bold py-2 px-4 rounded-md hover:bg-green-800 cursor-pointer" href="{{route('repositories.show', $repository)}}">
+                                    Ver
+                                </a>
+                            </td>
+                            <td>&ensp;</td>
+                            <td>
+                                <a class="bg-orange-500 text-white font-bold py-2 px-4 rounded-md hover:bg-orange-800 cursor-pointer" href="{{route('repositories.edit', $repository)}}">
+                                    Editar
+                                </a>
+                            </td>
+                        </tr>
                         @empty
-                            <tr>
-                                <td colspan="4">No hay repositorios creados</td>
-                            </tr>
+                        <tr>
+                            <td colspan="6">No hay repositorios creados</td>
+                        </tr>
                         @endforelse
                     </tbody>
                     </thead>

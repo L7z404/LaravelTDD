@@ -8,7 +8,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-4">
-                <form action="{{route('repositories.store')}}" method="POST" class="max-w-mg">
+                <form action="{{route('repositories.store')}}" method="POST" class="max-w-md">
                     @csrf
 
                     <label class="block font-medium text-sm text-gray-700">URL *</label>
@@ -20,7 +20,7 @@
 
                     <hr class="my-4">
 
-                    <input type="submit" value="Guardar" class="bg-blue-500 text-white font-bold py-2 px-4 rounded-md">
+                    <input type="submit" value="Guardar" class="bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-800 cursor-pointer">
                 </form>
             </div>
         </div>
