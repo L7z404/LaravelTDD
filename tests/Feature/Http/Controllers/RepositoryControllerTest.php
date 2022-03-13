@@ -59,6 +59,9 @@ class RepositoryControllerTest extends TestCase
         $this
             ->actingAs($user)
             ->get('repositories/create')
+            ->assertSee('url')
+            ->assertSee('descripcion')
+            ->assertSee('Guardar')
             ->assertStatus(200);
     }
     
